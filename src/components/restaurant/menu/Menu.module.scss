@@ -1,0 +1,60 @@
+@import "../../../assets/reset.css";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+
+.container {
+  font-family: 'Noto Sans KR', sans-serif;
+  height: 100%;
+}
+
+.right {
+  display: flex;
+  flex-direction: column; /* changed this from row to column */
+  height: max-content;
+  overflow-y: auto; /* add a vertical scrollbar if content overflows */
+  height: 100%;
+  margin-left: 15vw;
+  width: 85vw;
+}
+
+.menuitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center children horizontally */
+  justify-content: flex-end; /* align children to the bottom */
+  border-radius: 10%;
+  width: 15vw;
+  height: 20vw;
+  padding: 10px; /* optional, to provide some space at the bottom */
+  cursor: pointer;
+
+}
+
+.menulayout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* allows menu items to wrap to the next line */
+  align-items: center;
+  gap: 40px;
+  margin: 10%;
+}
+
+.menuname {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.menuinfo{
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+.menunimg {
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
