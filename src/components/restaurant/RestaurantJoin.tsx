@@ -199,12 +199,6 @@ function RestaurantJoin() {
             <label>메뉴 및 가격</label>
             <input type="file" {...register("menuPrice")} />
 
-            <a href="/files/menufile.xlsx" download>
-              메뉴 엑셀 다운로드
-            </a>
-
-            <label>메뉴 엑셀 파일</label>
-            <input type="file" {...register("logo")} />
 
             <label>영업시간</label>
             <input type="text" {...register("operationTime")} />

@@ -18,20 +18,44 @@ interface MenuItem {
 const Menu = () => {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
-  const [form, setForm] = useState({menu: "", price: 0, txt: ""});
-
+  const [menuData, setMenuData] = useState({// 수정할 메뉴의 정보를 상태로 관리
+    menuId: '',
+    menuName: '',
+    menuPrice: 0,
+    menuInfo: '',
+    menuImg: ''
+  }); 
 
   //------------------------------모달 관리----------------------------------
   
-  const openModal = (menu: MenuItem) => {  // 모달 열기
-    setIsOpen(true);
+  const openModal = (menu: MenuItem, index: number ) => {  // 모달 열기
     setSelectedMenu(menu);
+    setMenuData({
+      menuId: index.toString(), // index를 문자열로 변환
+      menuName: menu.menu,
+      menuPrice: menu.price,
+      menuInfo: menu.txt,
+      menuImg: menu.img
+    });
   };
+
+
 
   function closeModal() {//모달 닫기
     setIsOpen(false);
   }
   //------------------------------모달 관리----------------------------------
+
+
+
+ // 메뉴 정보를 수정하는 핸들러
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const { name, value } = e.target;
+  setMenuData({
+    ...menuData,
+    [name]: value
+  });
+};
 
   // 메뉴 정보 배열
   const menuinfo = [
@@ -210,7 +234,7 @@ const Menu = () => {
     <div
       key={index}
       className={styles.menuitem}
-      onClick={() => openModal(item)}>
+      onClick={() => openModal(item, index)}>
       <img className={styles.menunimg} src={item.img} alt={item.menu} />
       <h1 className={styles.menuname}>{item.menu}</h1>
       <h1 className={styles.menuinfo}>{item.price}원</h1>
@@ -219,46 +243,51 @@ const Menu = () => {
   ));
 
 
-  const updateMenu = async (e: any) => {
+  //-------------------백엔드 통신 -----------------------------------------------------
+  const updateMenu = async (e: React.FormEvent) => {
     e.preventDefault(); // 페이지 리로드 방지
     try {
-      const response = await axios.post('http://localhost:3001/admin/menuupdate', {
-        // menuname: item.menu,
-        // price:item.price,
-        // menuzinfo: item.txt
-      });
+      const response = await axios.post('http://localhost:5000/admin/{storeId}/menuUpdate', menuData);
+      //  menuId: /아이템의 배열 번호가 들어가야함
+      // menuName: item.menu,
+        // menuPrice:item.price,
+        // menuInfo: item.txt
+        // menuImg: item.img
       
       if (response.status === 200) {
-        alert('메뉴를 저장했습니다.');
+        alert('메뉴 저장');
         closeModal();
       }
     } catch (error) {
       console.error('메뉴 수정 오류:', error);
-      alert('메뉴 수정에 실패했습니다.');
+      alert('메뉴 수정 실패.');
     }
   };
 
-  // 모달 내부
   const modalContent = selectedMenu ? (
     <div>
       <h2>메뉴 수정: {selectedMenu.menu}</h2>
-      <form>
+      <form onSubmit={updateMenu}>
         <label>
           메뉴 이름:
-          <input type="text" defaultValue={selectedMenu.menu} />
+          <input type="text" name="menuName" value={menuData.menuName} onChange={handleChange} />
         </label>
         <label>
           가격:
-          <input type="number" defaultValue={selectedMenu.price} />
+          <input type="number" name="menuPrice" value={menuData.menuPrice} onChange={handleChange} />
         </label>
         <label>
           설명:
-          <textarea defaultValue={selectedMenu.txt} />
+          <textarea name="menuInfo" value={menuData.menuInfo} onChange={handleChange} />
+        </label>
+        <label>
+          이미지 URL:
+          <input type="text" name="menuImg" value={menuData.menuImg} onChange={handleChange} />
         </label>
         <button type="button" onClick={closeModal}>
-          취소
+          취소하기
         </button>
-        <button type="submit" onClick={updateMenu}>저장</button>
+        <button type="submit">수정하기</button>
       </form>
     </div>
   ) : null;
