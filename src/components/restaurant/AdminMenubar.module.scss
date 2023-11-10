@@ -1,3 +1,6 @@
+@import "../../assets/reset.css";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
 .menubar {
     font-size: 25px;
     display: flex;
@@ -7,6 +10,7 @@
     position: fixed;
     width: 15vw;
     height: 100vh;
+    background-color: white;
   } 
   .baritemLayout {
     display: flex; /* Make this a flex container */

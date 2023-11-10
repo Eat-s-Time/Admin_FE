@@ -1,0 +1,85 @@
+@import "../../../assets/reset.css";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+.container {
+    font-family: 'Noto Sans KR', sans-serif;
+    height: 100%;
+  }
+  
+  .right {
+    display: flex;
+    flex-direction: column; /* changed this from row to column */
+    height: max-content;
+    overflow-y: auto; /* add a vertical scrollbar if content overflows */
+    height: 100%;
+    margin-left: 15vw;
+    width: 85vw;
+  }
+.logo {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 3px solid white;
+  border-radius: 50%;
+
+} 
+.Bannerpic {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  height: 15vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 0)
+  ),
+    url("https://images.unsplash.com/photo-1611095772763-4b0b2b0b0b0b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhdXR5JTIwY2FyJTIwYmVhY2h8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80");
+}
+.logoBanner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.menuname {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.txt {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.infolayout {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+  margin-top: 50px;
+  align-items: flex-start;
+}
+
+.info {
+  font-size: 18px;
+  text-align: center;
+}
+
+.infoLogo {
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+}

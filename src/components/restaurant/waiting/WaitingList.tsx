@@ -173,6 +173,7 @@ const WaitingList = ({ waitingList }: WaitingListProps) => {
         <div className={styles.numberContainer}>
           <h1 className={styles.number}>대기 {guestList.length}명</h1>
         </div>
+        <div className={styles.marginDiv} ></div>
         {guestList.map((waiting, index) => (
           <div className={styles.guestContainer} key={index}>
             <div className={styles.rankingContainer}>

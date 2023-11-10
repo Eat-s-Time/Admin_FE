@@ -6,7 +6,6 @@ import axios from "axios";
 
 Modal.setAppElement("#root"); //모달이 바인딩 될 DOM 요소를 설정
 
-
 // 메뉴 아이템 타입 정의
 interface MenuItem {
   menu: string;
@@ -17,47 +16,48 @@ interface MenuItem {
 
 const Menu = () => {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
-  const [menuData, setMenuData] = useState({// 수정할 메뉴의 정보를 상태로 관리
-    menuId: '',
-    menuName: '',
+  const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null); //모달로 열 메뉴 정보를 상태 관리
+  const [updateMenu, setUpdateMenu] = useState({
+    // 수정할 메뉴의 정보를 상태 관리
+    menuId: "",
+    menuName: "",
     menuPrice: 0,
-    menuInfo: '',
-    menuImg: ''
-  }); 
+    menuInfo: "",
+    menuImg: "",
+  });
 
   //------------------------------모달 관리----------------------------------
-  
-  const openModal = (menu: MenuItem, index: number ) => {  // 모달 열기
+
+  const openModal = (menu: MenuItem, index: number) => {
+    // 모달 열기
     setSelectedMenu(menu);
-    setMenuData({
+    setUpdateMenu({
       menuId: index.toString(), // index를 문자열로 변환
       menuName: menu.menu,
       menuPrice: menu.price,
       menuInfo: menu.txt,
-      menuImg: menu.img
+      menuImg: menu.img,
     });
   };
 
-
-
-  function closeModal() {//모달 닫기
+  function closeModal() {
+    //모달 닫기
     setIsOpen(false);
   }
   //------------------------------모달 관리----------------------------------
 
+  // 메뉴 정보를 수정하는 핸들러
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setUpdateMenu({
+      ...updateMenu,
+      [name]: value,
+    });
+  };
 
-
- // 메뉴 정보를 수정하는 핸들러
- const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  const { name, value } = e.target;
-  setMenuData({
-    ...menuData,
-    [name]: value
-  });
-};
-
-  // 메뉴 정보 배열
+  // 메뉴 정보 임시 배열
   const menuinfo = [
     {
       menu: "김치 라면",
@@ -242,52 +242,86 @@ const Menu = () => {
     </div>
   ));
 
-
-  //-------------------백엔드 통신 -----------------------------------------------------
-  const updateMenu = async (e: React.FormEvent) => {
+//-------------------백엔드 통신 -----------------------------------------------------
+  const getMenu = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/admin/{storeId}/menu"
+      );
+      console.log(response);
+    } catch (error) {}
+  };
+  
+  const postMenu = async (e: React.FormEvent) => {
     e.preventDefault(); // 페이지 리로드 방지
     try {
-      const response = await axios.post('http://localhost:5000/admin/{storeId}/menuUpdate', menuData);
-      //  menuId: /아이템의 배열 번호가 들어가야함
+      const response = await axios.post(
+        "http://localhost:5000/admin/{storeId}/updateMenu",
+        updateMenu
+      );
+      //menuId: 
       // menuName: item.menu,
-        // menuPrice:item.price,
-        // menuInfo: item.txt
-        // menuImg: item.img
-      
+      // menuPrice:item.price,
+      // menuInfo: item.txt
+      // menuImg: item.img
+
       if (response.status === 200) {
-        alert('메뉴 저장');
+        alert("메뉴 저장");
         closeModal();
       }
     } catch (error) {
-      console.error('메뉴 수정 오류:', error);
-      alert('메뉴 수정 실패.');
+      console.error("메뉴 수정 오류:", error);
+      alert("메뉴 수정 실패.");
     }
   };
+
+//useEffect(() => {
+  // getMenu();
+// }
 
   const modalContent = selectedMenu ? (
     <div>
       <h2>메뉴 수정: {selectedMenu.menu}</h2>
-      <form onSubmit={updateMenu}>
+      <form onSubmit={postMenu}>
         <label>
           메뉴 이름:
-          <input type="text" name="menuName" value={menuData.menuName} onChange={handleChange} />
+          <input
+            type="text"
+            name="menuName"
+            value={updateMenu.menuName}
+            onChange={handleChange}
+          />
         </label>
         <label>
           가격:
-          <input type="number" name="menuPrice" value={menuData.menuPrice} onChange={handleChange} />
+          <input
+            type="number"
+            name="menuPrice"
+            value={updateMenu.menuPrice}
+            onChange={handleChange}
+          />
         </label>
         <label>
           설명:
-          <textarea name="menuInfo" value={menuData.menuInfo} onChange={handleChange} />
+          <input
+            name="menuInfo"
+            value={updateMenu.menuInfo}
+            onChange={handleChange}
+          />
         </label>
         <label>
           이미지 URL:
-          <input type="text" name="menuImg" value={menuData.menuImg} onChange={handleChange} />
+          <input
+          type="file"
+          name="menuImg"
+          onChange={handleChange}
+          accept="image/*"
+        />
         </label>
         <button type="button" onClick={closeModal}>
-          취소하기
+          취소
         </button>
-        <button type="submit">수정하기</button>
+        <button type="submit">저장</button>
       </form>
     </div>
   ) : null;
@@ -296,6 +330,7 @@ const Menu = () => {
     <div className={styles.container}>
       <AdminMenubar />
       <div className={styles.right}>
+        <div className={styles.menuInput}> + 메뉴추가</div>
         <div className={styles.menulayout} onClick={() => setIsOpen(true)}>
           {menuItems}
         </div>
