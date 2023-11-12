@@ -26,6 +26,12 @@ function AdminMenubar() {
         >
           가게 정보 수정
         </h1>
+        <h1 
+          className={location.pathname === "/admin/history" ? `${styles.baritem} ${styles.active}` : styles.baritem} 
+          onClick={() => history.push("/admin/history")}
+        >
+          웨이팅 내역
+          </h1>
       </div>
     </div>
   );

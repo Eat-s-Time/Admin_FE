@@ -186,6 +186,9 @@ function RestaurantJoin() {
 
             <label>통장사본</label>
             <input type="file" {...register("bankStatement")} />
+            <label>업종</label>
+            <input type="text" {...register("phoneNumber")} />
+
 
             <label>가게 전화번호</label>
             <input type="text" {...register("phoneNumber")} />
@@ -195,9 +198,6 @@ function RestaurantJoin() {
 
             <label>가게 소개</label>
             <input type="text" {...register("origin")}  />
-
-            <label>메뉴 및 가격</label>
-            <input type="file" {...register("menuPrice")} />
 
 
             <label>영업시간</label>

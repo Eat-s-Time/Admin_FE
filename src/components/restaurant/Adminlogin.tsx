@@ -19,6 +19,7 @@ function Adminlogin() {
     history.push("/admin/join");
   }
 
+
   const login = async () => {
     try { //백엔드통신 부분
       const response = await axios.post<LoginResponse>("http://localhost:9000/api/login", {
@@ -27,6 +28,8 @@ function Adminlogin() {
       });
 
       if (response.data.success) {
+    const token = window.location.href.split('?token=')[1];
+  localStorage.setItem('token', token);
         history.push("/adminstart");
       } else {
         setError("아이디 또는 비밀번호를 확인해주세요.");

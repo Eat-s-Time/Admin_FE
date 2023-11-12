@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminMenubar from "../AdminMenubar";
 import styles from "./Menu.module.scss";
 import Modal from "react-modal";
@@ -50,6 +50,7 @@ const Menu = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    getMenu();
     const { name, value } = e.target;
     setUpdateMenu({
       ...updateMenu,
@@ -246,17 +247,19 @@ const Menu = () => {
   const getMenu = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/admin/{storeId}/menu"
+        "http://localhost:9000/owner/1"
       );
       console.log(response);
-    } catch (error) {}
+    } catch (error) {
+      console.log("백엔드", error);
+    }
   };
   
   const postMenu = async (e: React.FormEvent) => {
     e.preventDefault(); // 페이지 리로드 방지
     try {
       const response = await axios.post(
-        "http://localhost:5000/admin/{storeId}/updateMenu",
+        "http://localhost:9000/admin/{storeId}/updateMenu",
         updateMenu
       );
       //menuId: 
@@ -275,9 +278,7 @@ const Menu = () => {
     }
   };
 
-//useEffect(() => {
-  // getMenu();
-// }
+
 
   const modalContent = selectedMenu ? (
     <div>
@@ -326,6 +327,11 @@ const Menu = () => {
     </div>
   ) : null;
 
+
+
+  useEffect(() => {
+    getMenu();
+  })
   return (
     <div className={styles.container}>
       <AdminMenubar />

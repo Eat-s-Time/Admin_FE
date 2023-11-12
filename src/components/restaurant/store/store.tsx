@@ -13,6 +13,7 @@ interface StoreInfo {
   address: string;
   time: string;
   phone: string;
+  waitingTime: number;
 }
 
 function Store() {
@@ -24,6 +25,7 @@ function Store() {
     address: '서울특별시 강남구 논현로 20길 22 1층',
     time: '10:00 ~ 23:00',
     phone: '02-577-9074',
+    waitingTime: 10,
   });
 
   // 입력 필드 변경 핸들러
@@ -66,9 +68,17 @@ function Store() {
         </div>
         <div className={styles.infolayout}>
           <p className={styles.infoLogo}>영업 정보</p>
+          <h4>주소</h4>
           <input type="text" name="address" value={storeInfo.address} onChange={handleChange} className={styles.info} />
+         
+          
+          <h4>영업시간</h4>
           <input type="text" name="time" value={storeInfo.time} onChange={handleChange} className={styles.info} />
+          <h4>전화번호</h4>
           <input type="text" name="phone" value={storeInfo.phone} onChange={handleChange} className={styles.info} />
+          <h4>한 팀당 웨이팅 시간 (분)</h4>
+          <input type="text" name="phone" value={storeInfo.waitingTime} onChange={handleChange} className={styles.info} />
+          
         </div>
         <button onClick={updateStoreInfo} className={styles.updateButton}>정보 업데이트</button>
       </div>
