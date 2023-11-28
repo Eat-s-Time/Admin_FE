@@ -5,20 +5,22 @@ import styles from "./RestaurantJoin.module.scss";
 
 interface IFormInput {
   owner: string;
-  businessNumber: string;
+  registNum: string;
   businessLicense: FileList;
   operationCertificate: FileList;
   bankStatement: FileList;
-  phoneNumber: string;
+  storePhone: string;
+  storeType: string;
+  storeName : string;
   logo: FileList;
-  origin: string;
-  menuPrice: FileList;
-  operationTime: string;
+  storeContent: string;
+  openingHour: string;
   holiday: string;
-  facilities: string[];
-  userId: string;
-  password: string;
-  passwordConfirm: string;
+  storeFacilities: string[];
+  ownerId: string;
+  ownerPassword: string;
+  ownerPasswordConfirm: string;
+  storeLocation: string;
 }
 
 function RestaurantJoin() {
@@ -30,12 +32,12 @@ function RestaurantJoin() {
     trigger,
     formState: { errors },
   } = useForm<IFormInput>();
-  const [facilities, setFacilities] = useState<string[]>([]); // 편의시설 정보
-  const password = watch("password");
-  const passwordConfirm = watch("passwordConfirm");
+  const [storeFacilities, setstoreFacilities] = useState<string[]>([]); // 편의시설 정보
+  const ownerPassword = watch("ownerPassword");
+  const ownerPasswordConfirm = watch("ownerPasswordConfirm");
 
   //편의시설 체크박스
-  const facilitiesOptions = [
+  const storeFacilitiesOptions = [
     { label: "반려동물", value: "petFriendly" },
     { label: "단체석구비", value: "groupSeating" },
     { label: "유아용 의자", value: "childChair" },
@@ -51,32 +53,27 @@ function RestaurantJoin() {
   //체크박스 처리 from
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
-    const updatedFacilities = checked
-      ? [...facilities, value]
-      : facilities.filter((f) => f !== value);
-    setFacilities(updatedFacilities);
-    setValue("facilities", updatedFacilities);
+    const updatedstoreFacilities = checked
+      ? [...storeFacilities, value]
+      : storeFacilities.filter((f) => f !== value);
+    setstoreFacilities(updatedstoreFacilities);
+    setValue("storeFacilities", updatedstoreFacilities);
   };
 
   //제출 함수
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (window.confirm(`입점 신청을 하시겠습니까?`)) {
       const formData = new FormData();
-      formData.append("businessNumber", data.businessNumber);
-      formData.append("businessLicense", data.businessLicense[0]);
-      formData.append("operationCertificate", data.operationCertificate[0]);
-      formData.append("bankStatement", data.bankStatement[0]);
-      formData.append("phoneNumber", data.phoneNumber);
-      formData.append("logo", data.logo[0]);
-      formData.append("origin", data.origin);
-      formData.append("menuPrice", data.menuPrice[0]);
-      formData.append("operationTime", data.operationTime);
-      formData.append("holiday", data.holiday);
-      formData.append("facilities", data.facilities.join(","));
-      formData.append("userId", data.userId);
-      formData.append("password", data.password);
+      formData.append("ownerLId", data.ownerId);
+      formData.append("ownerPassword", data.ownerPassword);
+      formData.append("registNum", data.registNum);
+      formData.append("storeName", data.storeName);
+      formData.append("storePhone", data.storePhone);
+      formData.append("storeContent", data.storeContent);
+      formData.append("storeLocation", data.storeLocation);
+      formData.append("openingHour", data.openingHour);
+      formData.append("storeFacilities", data.storeFacilities.join(","));
       console.log("formData:", formData);
-
       
       formData.forEach((value, key) => {
         console.log(key, value);
@@ -85,8 +82,9 @@ function RestaurantJoin() {
 
       //----------------------- backend 통신 부분 -----------------------
       try {
+        console.log("통신시작");
         const response = await axios.post(
-          "http://localhost:9000/restaurantInfo",
+          "http://localhost:9000/owner/register",
           formData,
           {
             headers: {
@@ -97,7 +95,7 @@ function RestaurantJoin() {
         console.log("Server Response:", response.data);
         alert("입점 신청이 완료되었습니다.");
       } catch (error) {
-        console.error("Submission error:", error);
+        console.error("backend error:", error);
       }
     }
   };
@@ -126,15 +124,15 @@ function RestaurantJoin() {
           <label>아이디</label>
           <input
             type="text"
-            {...register("userId", {
+            {...register("ownerId", {
               required: "아이디를 입력해주세요.",
             })}
           />
           {/* {errors.userId && <p>{errors.userId.message}</p>} */}
           <label>비밀번호</label>
           <input
-            type="password"
-            {...register("password", {
+            type="ownerPassword"
+            {...register("ownerPassword", {
               required: "비밀번호를 입력해주세요.",
               minLength: {
                 value: 8,
@@ -148,33 +146,33 @@ function RestaurantJoin() {
               },
             })}
             onChange={async (e) => {
-              await trigger("password");
+              await trigger("ownerPassword");
             }}
           />
 
-          {errors.password && (
+          {errors.ownerPassword && (
             <p>
-              {errors.password.type === "minLength" &&
+              {errors.ownerPassword.type === "minLength" &&
                 "8자리 이상, 영어 대소문자 혼용, 숫자, 특수문자를 포함해야 합니다."}
-              {errors.password.type === "pattern" &&
+              {errors.ownerPassword.type === "pattern" &&
                 "8자리 이상, 영어 대소문자 혼용, 숫자, 특수문자를 포함해야 합니다."}
             </p>
           )}
 
           <label>비밀번호 확인</label>
           <input
-            type="password"
-            {...register("passwordConfirm", {
+            type="ownerPassword"
+            {...register("ownerPasswordConfirm", {
               required: "비밀번호 확인을 입력해주세요.",
             })}
           />
-          {errors.passwordConfirm && <p>{errors.passwordConfirm.message}</p>}
-          {password && passwordConfirm && password !== passwordConfirm && (
+          {errors.ownerPasswordConfirm && <p>{errors.ownerPasswordConfirm.message}</p>}
+          {ownerPassword && ownerPasswordConfirm && ownerPassword !== ownerPasswordConfirm && (
             <p>비밀번호가 일치하지 않습니다.</p>
           )}
           <div>
             <label>사업자 등록번호</label>
-            <input type="text" {...register("businessNumber")} />
+            <input type="text" {...register("registNum")} />
             
             <label>사업주</label>
             <input type="file" {...register("businessLicense")} />
@@ -187,35 +185,38 @@ function RestaurantJoin() {
             <label>통장사본</label>
             <input type="file" {...register("bankStatement")} />
             <label>업종</label>
-            <input type="text" {...register("phoneNumber")} />
+            <input type="text" {...register("storeType")} />
 
+            <label>가게명</label>
+            <input type="text" {...register("storeName")} />
 
             <label>가게 전화번호</label>
-            <input type="text" {...register("phoneNumber")} />
+            <input type="text" {...register("storePhone")} />
 
             <label>로고 이미지</label>
             <input type="file" {...register("logo")} />
 
             <label>가게 소개</label>
-            <input type="text" {...register("origin")}  />
+            <input type="text" {...register("storeContent")}  />
 
-
+            <label>주소 </label>
+            <input type="text" {...register("storeLocation")} />
             <label>영업시간</label>
-            <input type="text" {...register("operationTime")} />
+            <input type="text" {...register("openingHour")} />
 
             <label>휴무일</label>
             <input type="text" {...register("holiday")} />
           </div>
           <h1>편의 시설</h1>
           <div className={styles.checkboxGroup}>
-            {facilitiesOptions.map(({ label, value }) => (
+            {storeFacilitiesOptions.map(({ label, value }) => (
               <div className={styles.checkboxContainer} key={value}>
                 <input
                   type="checkbox"
                   id={value}
                   value={value}
                   onChange={handleCheckboxChange}
-                  checked={facilities.includes(value)}
+                  checked={storeFacilities.includes(value)}
                 />
                 <label htmlFor={value}>{label}</label>
               </div>
