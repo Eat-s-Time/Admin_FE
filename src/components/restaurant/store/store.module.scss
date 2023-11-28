@@ -48,7 +48,13 @@
   padding: 30px;
   border-radius: 15px;
 }
-
+.stores{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px;
+  align-items: flex-start;
+}
 .menuname {
   font-size: 30px;
   font-weight: bold;
@@ -82,4 +88,8 @@
   font-size: 20px;
   text-align: center;
   font-weight: bold;
+}
+.updateButton {
+margin-bottom: 10vh;
+
 }

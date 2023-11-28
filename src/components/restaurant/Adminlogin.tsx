@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./Adminlogin.module.scss";
-
+import socketIOClient from "socket.io-client";
 interface LoginResponse {
   success: boolean;
 }
@@ -14,22 +14,24 @@ function Adminlogin() {
 
   const history = useHistory();
 
-
   const goBusinessMeet = () => {
     history.push("/admin/join");
-  }
-
+  };
 
   const login = async () => {
-    try { //백엔드통신 부분
-      const response = await axios.post<LoginResponse>("http://localhost:9000/api/login", {
-        username: userID,
-        password: password,
-      });
+    try {
+      //백엔드통신 부분
+      const response = await axios.post<LoginResponse>(
+        "http://localhost:9000/api/login",
+        {
+          username: userID,
+          password: password,
+        }
+      );
 
       if (response.data.success) {
-    const token = window.location.href.split('?token=')[1];
-  localStorage.setItem('token', token);
+        const token = window.location.href.split("?token=")[1];
+        localStorage.setItem("token", token);
         history.push("/adminstart");
       } else {
         setError("아이디 또는 비밀번호를 확인해주세요.");
@@ -41,9 +43,25 @@ function Adminlogin() {
   };
 
   const handleLogin = (event: FormEvent) => {
-    event.preventDefault();
+    event.preventDefault();  
     login();
   };
+
+
+
+useEffect(() => {
+  const socket = socketIOClient("http://localhost:3002");
+  
+  socket.on("receive message", function (message) {
+    console.log("Message received: ", message);
+  });
+
+  return () => {
+    socket.disconnect();
+  };
+}, []);
+
+
 
   return (
     <div className={styles.container}>
@@ -55,29 +73,33 @@ function Adminlogin() {
       </h1>
       <form className={styles.logincontainer} onSubmit={handleLogin}>
         <label>ID</label>
-        <input 
-          type="text" 
-          value={userID} 
+        <input
+          type="text"
+          value={userID}
           onChange={(e) => setUserID(e.target.value)}
           placeholder="아이디"
         />
         <label>Password</label>
-        <input 
-          type="password" 
+        <input
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="비밀번호"
         />
-      {error && <div className={styles.errorMessage}>{error}</div>}
+        {error && <div className={styles.errorMessage}>{error}</div>}
 
         <button type="submit" className={styles.loginbtn}>
           로그인하기
         </button>
       </form>
-      <h1  onClick={ goBusinessMeet} className={styles.admin}>잇츠타임 입점상회</h1>
-      <h1 className={styles.joinmessage}>© 2023. Eat'sTime Corp., Inc. All rights reserved</h1>
+      <h1 onClick={goBusinessMeet} className={styles.admin}>
+        잇츠타임 입점상회
+      </h1>
+      <h1 className={styles.joinmessage}>
+        © 2023. Eat'sTime Corp., Inc. All rights reserved
+      </h1>
     </div>
   );
 }
 
-  export default Adminlogin;
+export default Adminlogin;

@@ -8,9 +8,7 @@
   background-color: #f4f4f4;
   height: 100%;
   width: 100vw;
-
 }
-
 
 .container {
   display: flex;
@@ -32,10 +30,9 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #f4f4f4;
   margin-top: 1vh;
-                                                         
 }
 
-.marginDiv{
+.marginDiv {
   margin-top: 8vh;
 }
 
@@ -48,9 +45,9 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   z-index: 10;
-  display: flex; 
-  align-items: center; 
-  .number{
+  display: flex;
+  align-items: center;
+  .number {
     margin-left: 1vw;
     font-weight: bold;
     color: #212952;
@@ -76,7 +73,7 @@
   .h1 {
     font-size: 20px;
     color: grey;
-      margin-bottom: 1vh;
+    margin-bottom: 1vh;
   }
 }
 
@@ -120,4 +117,37 @@
   justify-content: center; /* 수평 가운데 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   gap: 1vh;
+}
+
+.waitingDead {
+  font-size: 20px;
+  height: 10vh;
+  position: fixed;
+  bottom: 0;
+  background-color: rgb(202, 28, 28);
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.waitingStart {
+  font-size: 20px;
+  height: 10vh;
+  position: fixed;
+  bottom: 0;
+  background-color: orange;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
